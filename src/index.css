@@ -46,6 +46,14 @@
 
 }
 
+.mas{
+    @apply text-green-500 dark:text-green-400
+}
+
+.fondo{
+    @apply bg-white dark:bg-zinc-800
+}
+
 .sidebar-input{
     @apply mt-3 pl-9 p-2 text-slate-800 dark:text-white rounded shadow border dark:bg-zinc-700 border-green-300 dark:border-green-50 placeholder:text-slate-600 dark:placeholder:text-zinc-400 text-sm focus:outline-none focus:bg-green-50 dark:focus:bg-zinc-600 max-w-full transition text-center
 }

@@ -89,6 +89,7 @@ import { TbTemperatureCelsius } from 'react-icons/tb'
 import { SiOxygen } from 'react-icons/si'
 import { DateTime } from 'luxon'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'
 
 function BarraCircular({ id, name, valor }) {
 
@@ -115,6 +116,8 @@ function BarraCircular({ id, name, valor }) {
       valor = 100;
     }
     barraValor = 125.6 + ((valor * 126.4) / 100);
+  }else if (id === "temperatura"){
+    barraValor = 125.6 + ((valor * 126.4) / 40);
   }
 
 
@@ -141,7 +144,7 @@ const initialState = {
   alumno: '',
   oximetria: '',
   frecuencia: '',
-  // temperatura: '',
+  temperatura: '',
   observaciones: ''
 }
 
@@ -149,20 +152,25 @@ const RegistroAutomatico = () => {
   const [bpm, setBPM] = useState(null);
   const [spo2, setSpO2] = useState(null);
   const [contador, setContador] = useState(0);
+  const [temp, setTemp] = useState(null);
 
   const [datos, setDatos] = useState(initialState)
   const [alumnos, setAlumnos] = useState([])
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://blynk.cloud/external/api/get?token=ik86R45NKaQc25kh2ziw2-wjIjEX1gz8&v1&v2&v3');
+        const response = await axios.get('https://ny3.blynk.cloud/external/api/get?token=ik86R45NKaQc25kh2ziw2-wjIjEX1gz8&v1&v2&v3&v4');
         const bpmValue = response.data.v1;
         const spo2Value = response.data.v2;
         const contadorValue = response.data.v3;
+        const tempValue = response.data.v4;
         setBPM(bpmValue);
         setSpO2(spo2Value);
         setContador(contadorValue);
+        setTemp(tempValue);
       } catch (error) {
         console.log(error);
       }
@@ -186,9 +194,10 @@ const RegistroAutomatico = () => {
 
   function handleCancel(){
     setDatos(initialState)
+    navigate('/')
   }
 
-  const {fecha, alumno, oximetria, frecuencia, observaciones} = datos
+  const {fecha, alumno, oximetria, frecuencia, temperatura, observaciones} = datos
 
 
   return (
@@ -210,12 +219,15 @@ const RegistroAutomatico = () => {
             </div>
           </div>
           {/* {contador == 50 ? ( */}
-            <div className='grid sm:grid-cols-2 gap-4 sm:gap-0 col-span-3'>
+            <div className='grid sm:grid-cols-3 gap-4 sm:gap-0 col-span-3'>
               <div className='text-center relative'>
                 <BarraCircular id="oximetria" name="Oximetría" valor={spo2} />
               </div>
               <div className='text-center relative'>
                 <BarraCircular id="frecuencia" name="Frecuencia Cardiaca" valor={bpm} />
+              </div>
+              <div className='text-center relative'>
+                <BarraCircular id="temperatura" name="Temperatura" valor={temp} />
               </div>
             </div>
           {/* ) : (

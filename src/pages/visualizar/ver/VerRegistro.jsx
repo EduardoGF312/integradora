@@ -10,6 +10,7 @@ const initialState = {
   alumno: "",
   oximetria: "",
   frecuencia: "",
+  temperatura: "",
   observaciones: "",
     
 }
@@ -29,7 +30,7 @@ const VerRegistro = () => {
 
   async function getRegistro(){
       try {
-          const registroVal = await axios.get(`http://127.0.0.1:5000/registros/ver/${id}`)
+          const registroVal = await axios.get(`https://pruebasint323.fly.dev/registros/ver/${id}`)
           setRegistro(registroVal.data)
       } catch (error) {
           console.error(error)
@@ -38,7 +39,7 @@ const VerRegistro = () => {
 
   async function handleEliminar(){
       try {
-        const eliminarRegistro = await axios.delete(`http://127.0.0.1:5000/registros/eliminar/${id}`)
+        const eliminarRegistro = await axios.delete(`https://pruebasint323.fly.dev/registros/eliminar/${id}`)
         notify(eliminarRegistro.status)
         setTimeout(() => {
           navigate('/visualizar/registros')
@@ -65,7 +66,7 @@ const VerRegistro = () => {
       }
   }
 
-  const {fecha, alumno, oximetria, frecuencia, observaciones} = registro
+  const {fecha, alumno, oximetria, frecuencia, temperatura, observaciones} = registro
 
   return (
     <>
@@ -76,6 +77,7 @@ const VerRegistro = () => {
                 <p className='my-2 text-lg'><b className='mr-2'>Nombre del alumno:</b> {alumno ? alumno : '. . .'}</p>
                 <p className='my-2 text-lg'><b className='mr-2'>Oximetría:</b> {oximetria ? oximetria : '. . .'}</p>
                 <p className='my-2 text-lg'><b className='mr-2'>Frecuencia:</b> {frecuencia ? frecuencia : '. . .'}</p>
+                <p className='my-2 text-lg'><b className='mr-2'>Temperatura:</b> {temperatura ? temperatura : '. . .'}</p>
                 <p className='my-2 text-lg'><b className='mr-2'>Observaciones:</b> {observaciones ? observaciones : '. . .'}</p>
             </div>
             <div className='mt-6 flex justify-center gap-6'>

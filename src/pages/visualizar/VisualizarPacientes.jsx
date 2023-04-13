@@ -20,7 +20,7 @@ const VisualizarPacientes = () => {
 
   async function getPacientes() {
     try {
-      const pacientesVal = await axios.get("http://127.0.0.1:5000/pacientes");
+      const pacientesVal = await axios.get("https://pruebasint323.fly.dev/pacientes");
       setPacientes(pacientesVal.data);
     } catch (error) {
       console.error(error)
@@ -30,7 +30,7 @@ const VisualizarPacientes = () => {
   async function handleEliminar(id){
     console.log(id)
     try {
-      const eliminarPaciente = await axios.delete(`http://127.0.0.1:5000/pacientes/eliminar/${id}`)
+      const eliminarPaciente = await axios.delete(`https://pruebasint323.fly.dev/pacientes/eliminar/${id}`)
       notify(eliminarPaciente.status)
       getPacientes()
     } catch (error) {
@@ -55,7 +55,7 @@ const VisualizarPacientes = () => {
     }
 }
 
-  const tableRows = pacientes ? pacientes.map(p => (
+  const tableRows = pacientes && pacientes.length > 0 ? ( pacientes.map((p) => (
     <tr className="hover:bg-green-50 dark:hover:bg-zinc-700 transition text-sm sm:text-base" key={p._id}>
        <td className="py-2">{p.nombre ? p.nombre : '. . .'}</td> 
        <td className="py-2">{p.apellido ? p.apellido : '. . .'}</td> 
@@ -68,10 +68,11 @@ const VisualizarPacientes = () => {
         <button className='btn btn-blue m-2' onClick={()=> navigate(`/modificar/paciente/${p._id}`)}><BsPen /></button>
        </td>
     </tr>
-  )) : (
+  )) 
+  ) : (
     <tr>
       <td className="py-14 text-center" colSpan="100%">
-        <AiOutlineLoading className=" text-center text-6xl animate-spin inline-block" />
+        <h1>No hay pacientes registrados</h1>
       </td>
     </tr>
   );
