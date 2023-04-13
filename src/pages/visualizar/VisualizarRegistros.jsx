@@ -35,9 +35,14 @@ function RegistroCard({ nombre, oximetria, frecuencia, temperatura, fecha, id, h
   )
 }
 
-const VisualizarRegistros = () => {
+function VisualizarRegistros() {
 
   const [registros, setRegistros] = useState()
+  const [buscar, setBuscar] = useState({
+    buscarTipo: 'nombre',
+    buscarValor: ''
+  })
+  const [visualizarRegistros, setVisualizarRegistros] = useState(localStorage.getItem('visualizarRegistros'))
 
   const colorScheme = localStorage.getItem('theme') //Para cambiar el color del calendario y del toast en input type="date"
 
@@ -45,7 +50,7 @@ const VisualizarRegistros = () => {
 
   useEffect(() => {
     getRegistros()
-
+    
   }, [])
 
   async function getRegistros() {
@@ -80,51 +85,31 @@ const VisualizarRegistros = () => {
     }
   }
 
-  const registrosCards =
-    registros && registros.length > 0 ? (
-      registros.map((r) => (
-        <RegistroCard
-          key={r._id}
-          nombre={r.alumno}
-          oximetria={r.oximetria}
-          frecuencia={r.frecuencia}
-          temperatura={r.temperatura}
-          fecha={r.fecha}
-          id={r._id}
-          handleEliminar={handleEliminar}
-        />
-      ))
-    ) : (
-      <div className="h-full w-full grid justify-center items-center">
-        <h2>No hay registros disponibles</h2>
-      </div>
-    );
-
-  //   const registrosCards = registros 
-  // ? registros.map(r => (
-  //   <RegistroCard key={r._id} nombre={r.alumno} oximetria={r.oximetria} frecuencia={r.frecuencia} temperatura={r.temperatura} fecha={r.fecha} id={r._id} handleEliminar={handleEliminar}/>
-  // ))
-  // : <div className='h-full w-full grid justify-center items-center'>
-  //     <AiOutlineLoading className=" text-center text-7xl animate-spin inline-block -mt-20" />
-  //   </div> 
-
+  const registrosCards = registros 
+  ? registros.map(r => (
+    <RegistroCard key={r._id} nombre={r.alumno} oximetria={r.oximetria} frecuencia={r.frecuencia} fecha={r.fecha} id={r._id} handleEliminar={handleEliminar}/>
+  ))
+  : <div className='h-full w-full grid justify-center items-center'>
+      <AiOutlineLoading className=" text-center text-7xl animate-spin inline-block -mt-20" />
+    </div> 
+  
 
   return (
     <>
       <div className='container h-5/6'>
         <h1 className='container-title'>Historial de registros</h1>
         <div className='w-full sm:w-3/4 overflow-y-auto snap-y h-4/5 sm:h-3/4 mx-auto mt-8 rounded bg-green-100 dark:bg-zinc-900 scrollbar-thin scrollbar-thumb-green-400 dark:scrollbar-thumb-zinc-700 relative'>
-
+          
           <div className='top-0 left-0 sticky group w-full sm:w-1/2 h-14'>
-            <input className='form-input !border-none !pl-10 !bg-green-300 dark:!bg-zinc-700 placeholder:!text-green-700 dark:placeholder:!text-zinc-200 !mt-0 border-r !rounded-r-none !rounded-br opacity-50 hover:opacity-100 focus:opacity-100 -translate-y-7 group-hover:translate-y-0 group-active:translate-y-0 focus:translate-y-0 peer !duration-200 absolute !w-full' placeholder='Buscar' />
-            <BsSearch className='absolute ml-3 mt-2.5 z-10 opacity-50 -translate-y-8 group-hover:translate-y-0 peer-focus:translate-y-0 peer-focus:opacity-100 group-hover:opacity-100 transition !duration-200' />
+            <input className='form-input !border-none !pl-10 !bg-green-300 dark:!bg-zinc-700 placeholder:!text-green-700 dark:placeholder:!text-zinc-200 !mt-0 border-r !rounded-r-none !rounded-br opacity-50 hover:opacity-100 focus:opacity-100 -translate-y-7 group-hover:translate-y-0 group-active:translate-y-0 focus:translate-y-0 peer !duration-200 absolute !w-full' placeholder='Buscar'/>
+            <BsSearch className='absolute ml-3 mt-2.5 z-10 opacity-50 -translate-y-8 group-hover:translate-y-0 peer-focus:translate-y-0 peer-focus:opacity-100 group-hover:opacity-100 transition !duration-200'/>
           </div>
-          <button className='btn btn-green absolute right-0 mr-4 -mt-4 text-lg sm:text-xl md:text-2xl' onClick={() => navigate('/registrar/manual')}><AiOutlinePlus /></button>
-          {registrosCards}
+          <button className='btn btn-green absolute right-0 mr-4 -mt-4 text-lg sm:text-xl md:text-2xl' onClick={()=> navigate('/registrar/manual')}><AiOutlinePlus /></button>
+            {registrosCards}
 
         </div>
       </div>
-      <ToastContainer theme={colorScheme} position="top-center" />
+      <ToastContainer theme={colorScheme} position="top-center"/>
     </>
   )
 }
